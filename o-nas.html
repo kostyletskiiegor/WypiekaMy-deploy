@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dowiedz się więcej o WypiekaMY — piekarni tworzonej z pasją.">
+  <title>O nas — WypiekaMY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; color: #8e1500; }
+    html { scrollbar-color: #e88a92 #ffebef; }
+    body { font-family: 'Nunito', sans-serif; background-color: #ffebef; }
+    ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-track { background: #ffebef; } ::-webkit-scrollbar-thumb { background: #e88a92; border-radius: 3px; }
+    #drawer-backdrop { position:fixed;inset:0;background:rgba(142,21,0,0.12);z-index:90;opacity:0;pointer-events:none;transition:opacity 0.28s ease; }
+    #drawer-backdrop.open { opacity:1;pointer-events:all; }
+    #drawer { position:fixed;top:0;left:0;height:100%;width:290px;background:#ffebef;z-index:100;transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:4px 0 32px rgba(142,21,0,0.1); }
+    #drawer.open { transform:translateX(0); }
+    .drawer-link { font-family:'Nunito',sans-serif;font-size:14.5px;font-weight:500;color:#8e1500;background:none;border:none;cursor:pointer;text-align:left;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;transition:background 0.15s; }
+    .drawer-link:hover { background:rgba(232,138,146,0.15); }
+    .drawer-divider { height:1px;background:rgba(232,138,146,0.3);margin:6px 24px; }
+    .drawer-search { font-family:'Nunito',sans-serif;background:transparent;color:#8e1500;border:1px solid rgba(232,138,146,0.45);border-radius:100px;padding:8px 14px 8px 36px;font-size:13px;width:100%;outline:none;transition:border-color 0.2s; }
+    .drawer-search::placeholder { color:rgba(142,21,0,0.38); }
+    .icon-btn { padding:8px;border-radius:10px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s; }
+    .icon-btn:hover { background:rgba(232,138,146,0.18); }
+    .val-card { background:rgba(255,255,255,0.6);border-radius:16px;padding:28px;border:1px solid rgba(232,138,146,0.2); }
+    .lang-btn { font-family:'Nunito',sans-serif;font-size:13px;font-weight:500;color:rgba(142,21,0,0.5);background:none;border:none;cursor:pointer;padding:2px 0; }
+    .lang-btn.active { color:#8e1500;border-bottom:1.5px solid #8e1500;font-weight:700; }
+  </style>
+</head>
+<body>
+
+  <div id="drawer-backdrop" onclick="closeDrawer()"></div>
+  <nav id="drawer">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;">
+      <button onclick="closeDrawer()" style="width:32px;height:32px;border-radius:8px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;" onmouseover="this.style.background='rgba(232,138,146,0.18)'" onmouseout="this.style.background='none'">
+        <svg width="18" height="18" fill="none" stroke="#8e1500" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="lang-btn active" data-lang="pl" onclick="setLanguage('pl')">Polski</button>
+        <span style="color:rgba(232,138,146,0.5);font-size:13px;">|</span>
+        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
+      </div>
+    </div>
+    <div style="position:relative;padding:4px 20px 14px;">
+      <svg style="position:absolute;left:32px;top:50%;transform:translateY(-60%);width:14px;height:14px;pointer-events:none;opacity:0.45;" fill="none" stroke="#8e1500" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text" data-i18n-ph="search" placeholder="Szukaj produktów" class="drawer-search">
+    </div>
+    <div style="flex:1;overflow-y:auto;padding-bottom:16px;">
+      <a href="index.html" class="drawer-link" data-i18n="nav_bakery">Cukiernia</a>
+      <a href="kontakt.html" class="drawer-link" data-i18n="nav_contact">Kontakt</a>
+      <div class="drawer-divider"></div>
+      <a href="#" class="drawer-link" target="_blank" rel="noopener">
+        <span data-i18n="nav_cafe">WypiekaMY Kawiarnia</span>
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink:0;opacity:0.5;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </a>
+      <a href="#" class="drawer-link" target="_blank" rel="noopener">
+        @wypiekamy
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink:0;opacity:0.5;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </a>
+      <div class="drawer-divider"></div>
+      <a href="regulamin.html" class="drawer-link" style="font-size:12.5px;opacity:0.7;" data-i18n="nav_terms">Regulamin cukierni</a>
+      <a href="o-nas.html" class="drawer-link" style="font-size:12.5px;opacity:0.7;font-weight:700;" data-i18n="nav_about">O nas</a>
+    </div>
+  </nav>
+
+  <header style="position:sticky;top:0;z-index:50;background:#ffebef;border-bottom:1px solid rgba(232,138,146,0.22);">
+    <div style="max-width:1400px;margin:0 auto;padding:0 16px;height:64px;display:flex;align-items:center;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;">
+        <button class="icon-btn" aria-label="Menu" onclick="openDrawer()">
+          <svg width="20" height="20" fill="none" stroke="#8e1500" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+      <a href="index.html" style="display:flex;align-items:center;flex-shrink:0;text-decoration:none;padding:0 8px;">
+        <img src="brand_assets/WypiekaMY_logo_transparent.png" alt="WypiekaMY" style="height:40px;width:180px;object-fit:cover;mix-blend-mode:multiply;">
+      </a>
+      <div style="flex:1;display:flex;justify-content:flex-end;">
+        <a href="kontakt.html" data-i18n="nav_contact" style="font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:600;color:#8e1500;text-decoration:none;padding:8px 16px;border:1px solid rgba(232,138,146,0.5);border-radius:100px;transition:background 0.15s;" onmouseover="this.style.background='rgba(232,138,146,0.15)'" onmouseout="this.style.background='none'">Kontakt</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div style="max-width:1400px;margin:0 auto;padding:12px 20px;">
+      <p style="font-size:12.5px;opacity:0.45;"><a href="index.html" data-i18n="bc_home" style="text-decoration:none;color:inherit;">Strona główna</a> › <span data-i18n="bc_about">O nas</span></p>
+    </div>
+
+    <section style="max-width:1400px;margin:0 auto;padding:24px 20px 48px;">
+      <h1 data-i18n="h1_about" style="font-size:clamp(36px,6vw,64px);font-weight:700;line-height:1.1;letter-spacing:-0.02em;max-width:600px;">O nas</h1>
+      <p data-i18n="hero_sub" style="font-size:15px;line-height:1.75;opacity:0.6;max-width:520px;margin-top:16px;">Jesteśmy małą piekarnią i cukiernią, która każdego dnia wkłada serce w każdy wypiek.</p>
+    </section>
+
+    <section style="max-width:1400px;margin:0 auto;padding:0 20px 64px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;">
+      <div>
+        <p data-i18n="story_label" style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.4;margin-bottom:12px;">Nasza historia</p>
+        <h2 data-i18n="story_h2" style="font-size:28px;font-weight:700;line-height:1.25;margin-bottom:20px;">Zaczęło się od miłości do wypieku</h2>
+        <p data-i18n="story_p1" style="font-size:14px;line-height:1.8;opacity:0.65;margin-bottom:14px;">[Tu uzupełnij historię WypiekaMY — skąd pochodzi pomysł na piekarnię, kto za nią stoi, co Was inspiruje.]</p>
+        <p data-i18n="story_p2" style="font-size:14px;line-height:1.8;opacity:0.65;margin-bottom:28px;">[Drugi akapit — co Was wyróżnia? Jakich składników używacie? Jak długo działacie?]</p>
+        <a href="kontakt.html" data-i18n="cta_contact" style="display:inline-flex;align-items:center;gap:8px;background:#8e1500;color:#ffebef;text-decoration:none;border-radius:100px;padding:12px 24px;font-size:14px;font-weight:600;transition:background 0.18s;" onmouseover="this.style.background='#a31800'" onmouseout="this.style.background='#8e1500'">Skontaktuj się z nami</a>
+      </div>
+      <div style="border-radius:20px;overflow:hidden;">
+        <img src="https://placehold.co/560x480/f5c0c8/8e1500?text=Nasza+piekarnia" alt="Nasza piekarnia" style="width:100%;display:block;object-fit:cover;">
+      </div>
+    </section>
+
+    <section style="background:rgba(232,138,146,0.08);padding:64px 20px;">
+      <div style="max-width:1400px;margin:0 auto;">
+        <p data-i18n="vals_label" style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.4;text-align:center;margin-bottom:10px;">Co nas definiuje</p>
+        <h2 data-i18n="vals_h2" style="font-size:32px;font-weight:700;text-align:center;margin-bottom:40px;">Nasze wartości</h2>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+          <div class="val-card">
+            <div style="width:44px;height:44px;border-radius:12px;background:rgba(232,138,146,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="22" height="22" fill="none" stroke="#8e1500" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            </div>
+            <h3 data-i18n="val1_title" style="font-size:17px;font-weight:700;margin-bottom:10px;">Pasja</h3>
+            <p data-i18n="val1_desc" style="font-size:13px;line-height:1.75;opacity:0.6;">[Opis wartości — co dla Was oznacza pasja w piekarstwie?]</p>
+          </div>
+          <div class="val-card">
+            <div style="width:44px;height:44px;border-radius:12px;background:rgba(232,138,146,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="22" height="22" fill="none" stroke="#8e1500" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+            </div>
+            <h3 data-i18n="val2_title" style="font-size:17px;font-weight:700;margin-bottom:10px;">Jakość</h3>
+            <p data-i18n="val2_desc" style="font-size:13px;line-height:1.75;opacity:0.6;">[Opis wartości — skąd pochodzi Wasza mąka, masło, jajka?]</p>
+          </div>
+          <div class="val-card">
+            <div style="width:44px;height:44px;border-radius:12px;background:rgba(232,138,146,0.25);display:flex;align-items:center;justify-content:center;margin-bottom:18px;">
+              <svg width="22" height="22" fill="none" stroke="#8e1500" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            </div>
+            <h3 data-i18n="val3_title" style="font-size:17px;font-weight:700;margin-bottom:10px;">Tradycja</h3>
+            <p data-i18n="val3_desc" style="font-size:13px;line-height:1.75;opacity:0.6;">[Opis wartości — jakie tradycyjne receptury kultywujesz?]</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="background:#ffebef;border-top:1px solid rgba(232,138,146,0.2);padding:24px 20px;margin-top:0;">
+    <div style="max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <p style="font-size:12px;opacity:0.35;">&copy; 2025 WypiekaMY. <span data-i18n="footer_copy">Wszelkie prawa zastrzeżone.</span></p>
+      <div style="display:flex;gap:20px;">
+        <a href="regulamin.html" data-i18n="nav_terms_short" style="font-size:12px;opacity:0.35;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">Regulamin</a>
+        <a href="kontakt.html" data-i18n="nav_contact" style="font-size:12px;opacity:0.35;text-decoration:none;transition:opacity 0.15s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">Kontakt</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const translations = {
+      pl: {
+        search:         'Szukaj produktów',
+        nav_bakery:     'Cukiernia',
+        nav_contact:    'Kontakt',
+        nav_cafe:       'WypiekaMY Kawiarnia',
+        nav_terms:      'Regulamin cukierni',
+        nav_terms_short:'Regulamin',
+        nav_about:      'O nas',
+        bc_home:        'Strona główna',
+        bc_about:       'O nas',
+        h1_about:       'O nas',
+        hero_sub:       'Jesteśmy małą piekarnią i cukiernią, która każdego dnia wkłada serce w każdy wypiek.',
+        story_label:    'Nasza historia',
+        story_h2:       'Zaczęło się od miłości do wypieku',
+        story_p1:       '[Tu uzupełnij historię WypiekaMY — skąd pochodzi pomysł na piekarnię, kto za nią stoi, co Was inspiruje.]',
+        story_p2:       '[Drugi akapit — co Was wyróżnia? Jakich składników używacie? Jak długo działacie?]',
+        cta_contact:    'Skontaktuj się z nami',
+        vals_label:     'Co nas definiuje',
+        vals_h2:        'Nasze wartości',
+        val1_title:     'Pasja',
+        val1_desc:      '[Opis wartości — co dla Was oznacza pasja w piekarstwie?]',
+        val2_title:     'Jakość',
+        val2_desc:      '[Opis wartości — skąd pochodzi Wasza mąka, masło, jajka?]',
+        val3_title:     'Tradycja',
+        val3_desc:      '[Opis wartości — jakie tradycyjne receptury kultywujesz?]',
+        footer_copy:    'Wszelkie prawa zastrzeżone.',
+      },
+      en: {
+        search:         'Search products',
+        nav_bakery:     'Bakery',
+        nav_contact:    'Contact',
+        nav_cafe:       'WypiekaMY Café',
+        nav_terms:      'Terms & Conditions',
+        nav_terms_short:'Terms',
+        nav_about:      'About us',
+        bc_home:        'Home',
+        bc_about:       'About us',
+        h1_about:       'About us',
+        hero_sub:       'We are a small bakery and patisserie that puts its heart into every bake, every single day.',
+        story_label:    'Our story',
+        story_h2:       'It all started with a love of baking',
+        story_p1:       '[Fill in the WypiekaMY story here — where the idea came from, who is behind it, what inspires you.]',
+        story_p2:       '[Second paragraph — what sets you apart? What ingredients do you use? How long have you been baking?]',
+        cta_contact:    'Get in touch',
+        vals_label:     'What defines us',
+        vals_h2:        'Our values',
+        val1_title:     'Passion',
+        val1_desc:      '[Describe this value — what does passion in baking mean to you?]',
+        val2_title:     'Quality',
+        val2_desc:      '[Describe this value — where does your flour, butter, and eggs come from?]',
+        val3_title:     'Tradition',
+        val3_desc:      '[Describe this value — which traditional recipes do you keep alive?]',
+        footer_copy:    'All rights reserved.',
+      }
+    };
+
+    let currentLang = localStorage.getItem('wypiekamy_lang') || 'pl';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('wypiekamy_lang', lang);
+      document.documentElement.lang = lang === 'en' ? 'en' : 'pl';
+      const t = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.dataset.i18nPh;
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+      document.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.lang === lang);
+      });
+    }
+
+    function openDrawer() { document.getElementById('drawer').classList.add('open'); document.getElementById('drawer-backdrop').classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawer-backdrop').classList.remove('open'); document.body.style.overflow=''; }
+    document.addEventListener('keydown', e => { if(e.key==='Escape') closeDrawer(); });
+
+    if (currentLang === 'en') setLanguage('en');
+  </script>
+</body>
+</html>

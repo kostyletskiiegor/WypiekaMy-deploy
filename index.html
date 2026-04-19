@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WypiekaMY — wypiekamy z miłością każdego dnia.">
+  <title>WypiekaMY</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg:      '#ffebef',
+            primary: '#8e1500',
+            accent:  '#e88a92',
+          },
+          fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; color: #8e1500; }
+    html { scrollbar-color: #e88a92 #ffebef; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #ffebef;
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 38px,
+          rgba(255,255,255,0.15) 38px,
+          rgba(255,255,255,0.15) 40px
+        ),
+        repeating-linear-gradient(
+          180deg,
+          transparent,
+          transparent 58px,
+          rgba(255,255,255,0.15) 58px,
+          rgba(255,255,255,0.15) 60px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          rgba(198,110,130,0.07) 0px,
+          rgba(220,140,155,0.05) 10px,
+          rgba(232,138,146,0.08) 20px,
+          rgba(180,90,108,0.06) 30px,
+          rgba(198,110,130,0.06) 40px
+        ),
+        linear-gradient(
+          to right,
+          rgba(210,90,120,0.28) 0%,
+          transparent 22%,
+          transparent 78%,
+          rgba(210,90,120,0.28) 100%
+        );
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    ::-webkit-scrollbar       { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: #ffebef; }
+    ::-webkit-scrollbar-thumb { background: #e88a92; border-radius: 3px; }
+
+    /* category tabs */
+    .cat-btn { font-family: 'Nunito', sans-serif; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; padding: 10px 14px; white-space: nowrap; font-size: 13.5px; font-weight: 500; color: #8e1500; display: flex; align-items: center; gap: 6px; transition: opacity 0.15s; }
+    .cat-btn:hover { opacity: 0.65; }
+    .cat-btn.active { border-bottom: 2px dashed #8e1500; font-weight: 700; }
+
+    /* hide scrollbar for categories strip */
+    .cat-strip { overflow-x: auto; scrollbar-width: none; }
+    .cat-strip::-webkit-scrollbar { display: none; }
+
+    /* product card */
+    .card { cursor: pointer; }
+    .card-img-wrap { position: relative; overflow: hidden; border-radius: 14px; }
+    .card-img-wrap img { width: 100%; aspect-ratio: 5 / 6; object-fit: cover; display: block; transition: transform 0.35s ease; border-radius: 14px; }
+    .card:hover .card-img-wrap img { transform: scale(1.04); }
+
+    /* heart button */
+    .heart-btn { position: absolute; bottom: 8px; right: 8px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.88); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 1px 6px rgba(142,21,0,0.12); transition: transform 0.15s; backdrop-filter: blur(4px); }
+    .heart-btn:hover { transform: scale(1.12); }
+    .heart-btn svg { width: 15px; height: 15px; transition: fill 0.15s; fill: none; }
+    .heart-btn.liked svg { fill: #8e1500; }
+
+    /* price badge on image */
+    .price-badge { position: absolute; bottom: 8px; right: 48px; font-family: 'Nunito', sans-serif; font-size: 11.5px; font-weight: 700; color: #8e1500; background: rgba(255,255,255,0.88); border-radius: 100px; padding: 2px 8px; white-space: nowrap; box-shadow: 0 1px 5px rgba(142,21,0,0.1); backdrop-filter: blur(4px); }
+
+    /* search input */
+    .search-input { font-family: 'Nunito', sans-serif; background: transparent; color: #8e1500; border: 1px solid rgba(232,138,146,0.45); border-radius: 100px; padding: 7px 14px 7px 34px; font-size: 12.5px; width: 196px; outline: none; transition: border-color 0.2s; }
+    .search-input::placeholder { color: rgba(142,21,0,0.38); }
+    .search-input:focus { border-color: rgba(232,138,146,0.9); }
+
+    /* icon button base */
+    .icon-btn { padding: 8px; border-radius: 10px; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    .icon-btn:hover { background: rgba(232,138,146,0.18); }
+
+    /* ── PRODUCT MODAL ── */
+    #prod-backdrop { position:fixed; inset:0; background:rgba(142,21,0,0.14); z-index:150; opacity:0; pointer-events:none; transition:opacity 0.28s ease; }
+    #prod-backdrop.open { opacity:1; pointer-events:all; }
+    #prod-modal { position:fixed; top:0; right:0; height:100%; width:min(860px,100%); background:#ffebef; z-index:151; transform:translateX(100%); transition:transform 0.36s cubic-bezier(0.4,0,0.2,1); overflow-y:auto; box-shadow:-6px 0 48px rgba(142,21,0,0.1); display:flex; flex-direction:column; }
+    #prod-modal.open { transform:translateX(0); }
+    .modal-topbar { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid rgba(232,138,146,0.2); position:sticky; top:0; background:#ffebef; z-index:1; }
+    .modal-close-btn { width:34px; height:34px; border-radius:8px; background:none; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.15s; flex-shrink:0; }
+    .modal-close-btn:hover { background:rgba(232,138,146,0.2); }
+    .modal-content { display:grid; grid-template-columns:1fr 1fr; gap:0; flex:1; }
+    @media(max-width:640px){ .modal-content{grid-template-columns:1fr;} }
+    .modal-img-col { padding:24px; }
+    .modal-img-col img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:16px; display:block; }
+    .modal-detail-col { padding:24px 28px; display:flex; flex-direction:column; gap:14px; }
+    .modal-add-btn { display:flex; align-items:center; justify-content:center; gap:10px; background:#8e1500; color:#ffebef; border:none; border-radius:100px; padding:14px 28px; font-family:'Nunito',sans-serif; font-size:15px; font-weight:700; cursor:pointer; transition:background 0.18s,transform 0.1s; width:100%; margin-top:auto; }
+    .modal-add-btn:hover { background:#a31800; }
+    .modal-add-btn:active { transform:scale(0.97); }
+
+    /* ── DRAWER ── */
+    #drawer-backdrop { position: fixed; inset: 0; background: rgba(142,21,0,0.12); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.28s ease; }
+    #drawer-backdrop.open { opacity: 1; pointer-events: all; }
+    #drawer { position: fixed; top: 0; left: 0; height: 100%; width: 290px; background: #ffebef; z-index: 100; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; box-shadow: 4px 0 32px rgba(142,21,0,0.1); }
+    #drawer.open { transform: translateX(0); }
+    .drawer-link { font-family: 'Nunito', sans-serif; font-size: 14.5px; font-weight: 500; color: #8e1500; background: none; border: none; cursor: pointer; text-align: left; padding: 11px 24px; display: flex; align-items: center; justify-content: space-between; gap: 8px; text-decoration: none; transition: background 0.15s; }
+    .drawer-link:hover { background: rgba(232,138,146,0.15); }
+    .drawer-divider { height: 1px; background: rgba(232,138,146,0.3); margin: 6px 24px; }
+    .drawer-search { font-family: 'Nunito', sans-serif; background: transparent; color: #8e1500; border: 1px solid rgba(232,138,146,0.45); border-radius: 100px; padding: 8px 14px 8px 36px; font-size: 13px; width: 100%; outline: none; transition: border-color 0.2s; }
+    .drawer-search::placeholder { color: rgba(142,21,0,0.38); }
+    .drawer-search:focus { border-color: rgba(232,138,146,0.85); }
+    .lang-btn { font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 500; color: rgba(142,21,0,0.5); background: none; border: none; cursor: pointer; padding: 2px 0; }
+    .lang-btn.active { color: #8e1500; border-bottom: 1.5px solid #8e1500; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       PRODUCT MODAL
+  ========================================================= -->
+  <div id="prod-backdrop" onclick="closeProduct()"></div>
+  <div id="prod-modal" role="dialog" aria-modal="true" aria-label="Szczegóły produktu">
+    <!-- Top bar: breadcrumb + close -->
+    <div class="modal-topbar">
+      <span id="modal-breadcrumb" style="font-size:13px;font-weight:500;opacity:0.55;"></span>
+      <button class="modal-close-btn" onclick="closeProduct()" aria-label="Zamknij">
+        <svg width="18" height="18" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Two-column body -->
+    <div class="modal-content">
+      <!-- Left: image -->
+      <div class="modal-img-col">
+        <div style="position:relative;">
+          <img id="modal-img" src="" alt="">
+          <button class="heart-btn" id="modal-heart" onclick="toggleHeart(this)" aria-label="Ulubione" style="position:absolute;bottom:10px;right:10px;">
+            <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- Right: details -->
+      <div class="modal-detail-col">
+        <p id="modal-cat" style="font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.45;"></p>
+        <h2 id="modal-name" style="font-size:24px;font-weight:700;line-height:1.25;"></h2>
+        <p id="modal-available" style="font-size:13px;opacity:0.5;"></p>
+        <p id="modal-desc" style="font-size:14px;line-height:1.75;opacity:0.75;"></p>
+        <div style="border-top:1px solid rgba(232,138,146,0.25);padding-top:14px;">
+          <p id="modal-fresh-label" style="font-size:13px;font-weight:700;margin-bottom:6px;" data-i18n="modal_fresh">Najlepsze na świeżo.</p>
+          <p id="modal-freshness" style="font-size:13px;line-height:1.7;opacity:0.6;"></p>
+        </div>
+        <div style="border-top:1px solid rgba(232,138,146,0.25);padding-top:14px;display:flex;align-items:center;justify-content:space-between;">
+          <span id="modal-total-label" style="font-size:13.5px;opacity:0.6;" data-i18n="modal_total">Łącznie:</span>
+          <span id="modal-price" style="font-size:22px;font-weight:700;"></span>
+        </div>
+        <button class="modal-add-btn">
+          <span data-i18n="modal_add">Dodaj do koszyka</span>
+          <svg width="18" height="18" fill="none" stroke="#ffebef" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       DRAWER BACKDROP
+  ========================================================= -->
+  <div id="drawer-backdrop" onclick="closeDrawer()"></div>
+
+  <!-- =========================================================
+       DRAWER
+  ========================================================= -->
+  <nav id="drawer" aria-label="Menu nawigacyjne">
+
+    <!-- Top row: close + language -->
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 12px;">
+      <button onclick="closeDrawer()" aria-label="Zamknij menu"
+        style="width: 32px; height: 32px; border-radius: 8px; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s;"
+        onmouseover="this.style.background='rgba(232,138,146,0.18)'" onmouseout="this.style.background='none'">
+        <svg width="18" height="18" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button class="lang-btn active" data-lang="pl" onclick="setLanguage('pl')">Polski</button>
+        <span style="color: rgba(232,138,146,0.5); font-size: 13px;">|</span>
+        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div style="position: relative; padding: 4px 20px 14px;">
+      <svg style="position: absolute; left: 32px; top: 50%; transform: translateY(-60%); width: 14px; height: 14px; pointer-events: none; opacity: 0.45;" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input type="text" data-i18n-ph="search" placeholder="Szukaj produktów" class="drawer-search">
+    </div>
+
+    <!-- Nav links -->
+    <div style="flex: 1; overflow-y: auto; padding-bottom: 16px;">
+      <a href="#" class="drawer-link" onclick="closeDrawer()" data-i18n="nav_bakery">Cukiernia</a>
+      <a href="kontakt.html" class="drawer-link" onclick="closeDrawer()" data-i18n="nav_contact">Kontakt</a>
+
+      <div class="drawer-divider"></div>
+
+      <a href="#" class="drawer-link" target="_blank" rel="noopener">
+        <span data-i18n="nav_cafe">WypiekaMY Kawiarnia</span>
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink:0; opacity:0.5;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+        </svg>
+      </a>
+      <a href="#" class="drawer-link" target="_blank" rel="noopener">
+        @wypiekamy
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="flex-shrink:0; opacity:0.5;">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+        </svg>
+      </a>
+
+      <div class="drawer-divider"></div>
+
+      <a href="regulamin.html" class="drawer-link" style="font-size: 12.5px; opacity: 0.7;" onclick="closeDrawer()" data-i18n="nav_terms">Regulamin cukierni</a>
+      <a href="o-nas.html" class="drawer-link" style="font-size: 12.5px; opacity: 0.7;" onclick="closeDrawer()" data-i18n="nav_about">O nas</a>
+    </div>
+
+  </nav>
+
+  <!-- =========================================================
+       HEADER
+  ========================================================= -->
+  <header style="position: sticky; top: 0; z-index: 50; background: #ffebef; border-bottom: 1px solid rgba(232,138,146,0.22);">
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 16px; height: 64px; display: flex; align-items: center; gap: 12px;">
+
+      <!-- LEFT: hamburger + search -->
+      <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;">
+        <button class="icon-btn" aria-label="Menu" onclick="openDrawer()">
+          <svg width="20" height="20" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+        <div style="position: relative; display: flex; align-items: center;" class="hidden sm:flex">
+          <svg style="position: absolute; left: 11px; width: 14px; height: 14px; pointer-events: none; opacity: 0.45;" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" data-i18n-ph="search" placeholder="Szukaj produktów" class="search-input">
+        </div>
+      </div>
+
+      <!-- CENTER: Logo -->
+      <a href="#" style="display: flex; align-items: center; flex-shrink: 0; text-decoration: none; padding: 0 8px;">
+        <img src="brand_assets/WypiekaMY_logo_transparent.png" alt="WypiekaMY"
+          style="height:40px;width:180px;object-fit:cover;mix-blend-mode:multiply;">
+      </a>
+
+      <!-- RIGHT: Cart button -->
+      <div style="flex: 1; display: flex; justify-content: flex-end;">
+        <button id="cart-btn"
+          style="display: flex; align-items: center; gap: 8px; background: #8e1500; border: none; border-radius: 100px; padding: 8px 18px; cursor: pointer; font-family: 'Nunito', sans-serif; transition: background 0.18s, transform 0.1s;"
+          onmouseover="this.style.background='#a31800'" onmouseout="this.style.background='#8e1500'"
+          onmousedown="this.style.transform='scale(0.96)'" onmouseup="this.style.transform='scale(1)'">
+          <span style="font-size: 13.5px; font-weight: 600; color: #ffebef; white-space: nowrap;" data-i18n="cart">Koszyk</span>
+          <svg width="17" height="17" fill="none" stroke="#ffebef" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- =========================================================
+       MOBILE SEARCH
+  ========================================================= -->
+  <div class="flex sm:hidden px-4 py-2.5" style="background: #ffebef; border-bottom: 1px solid rgba(232,138,146,0.15);">
+    <div style="position: relative; width: 100%;">
+      <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; pointer-events: none; opacity: 0.45;" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input type="text" data-i18n-ph="search" placeholder="Szukaj produktów" class="search-input" style="width: 100%;">
+    </div>
+  </div>
+
+  <!-- =========================================================
+       CATEGORY TABS
+  ========================================================= -->
+  <div style="background: #ffebef; position: sticky; top: 64px; z-index: 40; border-bottom: 1px solid rgba(232,138,146,0.2);">
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 8px; display: flex; align-items: stretch;" class="cat-strip">
+      <button class="cat-btn active" data-i18n="cat_all" onclick="filterCat(this,'all')">🍩 Pączki</button>
+      <button class="cat-btn" data-i18n="cat_ciasta" onclick="filterCat(this,'ciasta')">🥐 Ciasta</button>
+      <button class="cat-btn" data-i18n="cat_torty" onclick="filterCat(this,'torty')">🎂 Torty</button>
+      <button class="cat-btn" data-i18n="cat_serniki" onclick="filterCat(this,'serniki')">🍰 Serniki</button>
+      <button class="cat-btn" data-i18n="cat_pufy" onclick="filterCat(this,'pufy')">☁️ Pufy (pt–nd)</button>
+      <button class="cat-btn" data-i18n="cat_czekolada" onclick="filterCat(this,'czekolada')">🍫 Czekolada</button>
+      <button class="cat-btn" data-i18n="cat_cukierki" onclick="filterCat(this,'cukierki')">🍬 Cukierki</button>
+      <button class="cat-btn" data-i18n="cat_zestawy" onclick="filterCat(this,'zestawy')">🎁 Zestawy</button>
+      <span style="display: flex; align-items: center; padding: 0 10px; color: #e88a92; font-size: 18px; flex-shrink: 0; user-select: none;">›</span>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       PRODUCT GRID
+  ========================================================= -->
+  <main style="max-width: 1180px; margin: 0 auto; padding: 32px 28px;">
+    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4" style="gap: 26px;">
+
+      <!-- Card 1 -->
+      <div class="card" data-cat="all" data-id="1" onclick="openProduct(1)">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x400/f2aab8/8e1500?text=Pączek+Wiśnia" alt="Pączek wiśniowy ze śmietaną" loading="lazy">
+          <span class="price-badge" style="display:none;">18 zł</span>
+          <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)" aria-label="Ulubione">
+            <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div style="padding: 10px 4px 14px;">
+          <p class="card-name" style="font-size: 13px; font-weight: 600; line-height: 1.35;">Pączek wiśniowy ze śmietaną</p>
+          <p style="font-size: 13px; font-weight: 700; margin-top: 3px;">18 zł</p>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card" data-cat="all" data-id="2" onclick="openProduct(2)">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x400/f5b8c4/8e1500?text=Pączek+Mango" alt="Pączek mango-marakuja-kokos" loading="lazy">
+          <span class="price-badge" style="display:none;">22 zł</span>
+          <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)" aria-label="Ulubione">
+            <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div style="padding: 10px 4px 14px;">
+          <p class="card-name" style="font-size: 13px; font-weight: 600; line-height: 1.35;">Pączek mango‑marakuja‑kokos</p>
+          <p style="font-size: 13px; font-weight: 700; margin-top: 3px;">22 zł</p>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card" data-cat="pufy" data-id="3" onclick="openProduct(3)">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x400/eea8b8/8e1500?text=Puf+Karmelowy" alt="Puf karmelowy fudge" loading="lazy">
+          <span class="price-badge" style="display:none;">24 zł</span>
+          <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)" aria-label="Ulubione">
+            <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div style="padding: 10px 4px 14px;">
+          <p class="card-name" style="font-size: 13px; font-weight: 600; line-height: 1.35;">Puf karmelowy fudge</p>
+          <p style="font-size: 13px; font-weight: 700; margin-top: 3px;">24 zł</p>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card" data-cat="pufy" data-id="4" onclick="openProduct(4)">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x400/d4c8a8/8e1500?text=Puf+Matcha" alt="Puf matcha-li" loading="lazy">
+          <span class="price-badge" style="display:none;">24 zł</span>
+          <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)" aria-label="Ulubione">
+            <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div style="padding: 10px 4px 14px;">
+          <p class="card-name" style="font-size: 13px; font-weight: 600; line-height: 1.35;">Puf matcha‑li</p>
+          <p style="font-size: 13px; font-weight: 700; margin-top: 3px;">24 zł</p>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="card" data-cat="ciasta" data-id="5" onclick="openProduct(5)">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x400/f0a0b8/8e1500?text=Torcik" alt="Torcik czekoladowy z jagodami" loading="lazy">
+          <span class="price-badge" style="display:none;">28 zł</span>
+          <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)" aria-label="Ulubione">
+            <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div style="padding: 10px 4px 14px;">
+          <p class="card-name" style="font-size: 13px; font-weight: 600; line-height: 1.35;">Torcik czekoladowy z jagodami</p>
+          <p style="font-size: 13px; font-weight: 700; margin-top: 3px;">28 zł</p>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="card" data-cat="ciasta" data-id="6" onclick="openProduct(6)">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x400/f7c8a8/8e1500?text=Croissant" alt="Croissant migdałowy" loading="lazy">
+          <span class="price-badge" style="display:none;">16 zł</span>
+          <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)" aria-label="Ulubione">
+            <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div style="padding: 10px 4px 14px;">
+          <p class="card-name" style="font-size: 13px; font-weight: 600; line-height: 1.35;">Croissant migdałowy z kremem</p>
+          <p style="font-size: 13px; font-weight: 700; margin-top: 3px;">16 zł</p>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="card" data-cat="serniki" data-id="7" onclick="openProduct(7)">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x400/f5d0b8/8e1500?text=Sernik" alt="Sernik nowojorski z malinami" loading="lazy">
+          <span class="price-badge" style="display:none;">26 zł</span>
+          <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)" aria-label="Ulubione">
+            <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div style="padding: 10px 4px 14px;">
+          <p class="card-name" style="font-size: 13px; font-weight: 600; line-height: 1.35;">Sernik nowojorski z malinami</p>
+          <p style="font-size: 13px; font-weight: 700; margin-top: 3px;">26 zł</p>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="card" data-cat="torty" data-id="8" onclick="openProduct(8)">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x400/e8a8c0/8e1500?text=Rolada" alt="Rolada kawowa z mascarpone" loading="lazy">
+          <span class="price-badge" style="display:none;">22 zł</span>
+          <button class="heart-btn" onclick="event.stopPropagation();toggleHeart(this)" aria-label="Ulubione">
+            <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+        </div>
+        <div style="padding: 10px 4px 14px;">
+          <p class="card-name" style="font-size: 13px; font-weight: 600; line-height: 1.35;">Rolada kawowa z mascarpone</p>
+          <p style="font-size: 13px; font-weight: 700; margin-top: 3px;">22 zł</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" style="display:none; text-align:center; padding:64px 16px;">
+      <p data-i18n="no_products" style="font-size:15px; font-weight:500; color:rgba(142,21,0,0.4);">Brak produktów w tej kategorii.</p>
+    </div>
+  </main>
+
+  <!-- =========================================================
+       JS
+  ========================================================= -->
+  <script>
+    /* ── PRODUCTS ── */
+    const products = [
+      {
+        id:1,
+        name:"Pączek wiśniowy ze śmietaną", name_en:"Cherry Cream Doughnut",
+        price:18,
+        cat:"Pączki", cat_en:"Doughnuts",
+        img:"https://placehold.co/600x600/f2aab8/8e1500?text=Pączek+Wiśnia",
+        desc:"Delikatny pączek wypełniony kremem wiśniowym z bitą śmietaną. Przygotowywany codziennie rano według tradycyjnej receptury, z wiśni sezonowych i najwyższej jakości masła.",
+        desc_en:"A delicate doughnut filled with cherry cream and whipped cream. Made fresh every morning from a traditional recipe, using seasonal cherries and the finest quality butter.",
+        freshness:"Najlepszy tego samego dnia. Przechowuj w temperaturze pokojowej do 24 godzin.",
+        freshness_en:"Best on the same day. Store at room temperature for up to 24 hours.",
+        available:12
+      },
+      {
+        id:2,
+        name:"Pączek mango‑marakuja‑kokos", name_en:"Mango–Passion Fruit–Coconut Doughnut",
+        price:22,
+        cat:"Pączki", cat_en:"Doughnuts",
+        img:"https://placehold.co/600x600/f5b8c4/8e1500?text=Pączek+Mango",
+        desc:"Egzotyczne połączenie mango, marakui i kokosa w puszystym cieście drożdżowym. Idealny dla tych, którzy lubią odrobinę tropiku w szarej codzienności.",
+        desc_en:"An exotic blend of mango, passion fruit, and coconut in fluffy yeast dough. Perfect for those who love a touch of the tropics.",
+        freshness:"Najlepszy tego samego dnia. Przechowuj w temperaturze pokojowej do 24 godzin.",
+        freshness_en:"Best on the same day. Store at room temperature for up to 24 hours.",
+        available:8
+      },
+      {
+        id:3,
+        name:"Puf karmelowy fudge", name_en:"Caramel Fudge Puff",
+        price:24,
+        cat:"Pufy", cat_en:"Puffs",
+        img:"https://placehold.co/600x600/eea8b8/8e1500?text=Puf+Karmelowy",
+        desc:"Lekki jak chmurka puf z intensywnym nadzieniem karmelowym fudge. Chrupiący z zewnątrz, aksamitny i rozpływający się w ustach od środka.",
+        desc_en:"Light as a cloud puff with an intense caramel fudge filling. Crispy on the outside, velvety and melt-in-your-mouth on the inside.",
+        freshness:"Dostępny w piątki, soboty i niedziele. Spożyj w ciągu 3 dni od zakupu.",
+        freshness_en:"Available Fridays, Saturdays, and Sundays. Consume within 3 days of purchase.",
+        available:6
+      },
+      {
+        id:4,
+        name:"Puf matcha‑li", name_en:"Matcha–Lime Puff",
+        price:24,
+        cat:"Pufy", cat_en:"Puffs",
+        img:"https://placehold.co/600x600/d4c8a8/8e1500?text=Puf+Matcha",
+        desc:"Delikatny puf z kremem z japońskiej herbaty matcha i limonki. Subtelna gorycz matchy doskonale równoważy słodycz ciasta.",
+        desc_en:"A delicate puff with Japanese matcha and lime cream. The subtle bitterness of matcha perfectly balances the sweetness of the pastry.",
+        freshness:"Dostępny w piątki, soboty i niedziele. Spożyj w ciągu 3 dni od zakupu.",
+        freshness_en:"Available Fridays, Saturdays, and Sundays. Consume within 3 days of purchase.",
+        available:6
+      },
+      {
+        id:5,
+        name:"Torcik czekoladowy z jagodami", name_en:"Chocolate Blueberry Mini Cake",
+        price:28,
+        cat:"Ciasta", cat_en:"Pastries",
+        img:"https://placehold.co/600x600/f0a0b8/8e1500?text=Torcik",
+        desc:"Mini torcik z ganache czekoladowym i świeżymi jagodami. Intensywny smak gorzkiej czekolady przełamany kwaskowatością owoców.",
+        desc_en:"A mini cake with dark chocolate ganache and fresh blueberries. The intense flavour of dark chocolate is cut through by the tartness of the berries.",
+        freshness:"Przechowuj w lodówce. Spożyj w ciągu 2 dni.",
+        freshness_en:"Keep refrigerated. Consume within 2 days.",
+        available:4
+      },
+      {
+        id:6,
+        name:"Croissant migdałowy z kremem", name_en:"Almond Cream Croissant",
+        price:16,
+        cat:"Ciasta", cat_en:"Pastries",
+        img:"https://placehold.co/600x600/f7c8a8/8e1500?text=Croissant",
+        desc:"Maślany croissant wypełniony kremem frangipane i obsypany prażonymi płatkami migdałów. Chrupiący, aromatyczny i wyjątkowo sycący.",
+        desc_en:"A buttery croissant filled with frangipane cream and topped with toasted almond flakes. Crispy, fragrant, and wonderfully satisfying.",
+        freshness:"Najlepszy świeży, tego samego dnia. Przechowuj w temperaturze pokojowej do 24 godzin.",
+        freshness_en:"Best fresh, on the same day. Store at room temperature for up to 24 hours.",
+        available:15
+      },
+      {
+        id:7,
+        name:"Sernik nowojorski z malinami", name_en:"New York Cheesecake with Raspberries",
+        price:26,
+        cat:"Serniki", cat_en:"Cheesecakes",
+        img:"https://placehold.co/600x600/f5d0b8/8e1500?text=Sernik",
+        desc:"Klasyczny nowojorski sernik na kruchym maślanym spodzie z sosem malinowym. Gęsty, kremowy i aksamitny — taki jak powinien być.",
+        desc_en:"Classic New York cheesecake on a buttery shortcrust base with raspberry sauce. Dense, creamy, and velvety — exactly as it should be.",
+        freshness:"Przechowuj w lodówce. Spożyj w ciągu 3 dni.",
+        freshness_en:"Keep refrigerated. Consume within 3 days.",
+        available:5
+      },
+      {
+        id:8,
+        name:"Rolada kawowa z mascarpone", name_en:"Coffee & Mascarpone Roulade",
+        price:22,
+        cat:"Torty", cat_en:"Cakes",
+        img:"https://placehold.co/600x600/e8a8c0/8e1500?text=Rolada",
+        desc:"Delikatne biszkoptowe ciasto z kremem kawowym na bazie mascarpone i espresso. Dla tych, którzy chcą kawy i deseru jednocześnie.",
+        desc_en:"A light sponge cake with mascarpone and espresso cream. For those who want both coffee and dessert at the same time.",
+        freshness:"Przechowuj w lodówce. Spożyj w ciągu 3 dni.",
+        freshness_en:"Keep refrigerated. Consume within 3 days.",
+        available:7
+      },
+    ];
+
+    /* ── TRANSLATIONS ── */
+    const translations = {
+      pl: {
+        cart:         'Koszyk',
+        search:       'Szukaj produktów',
+        nav_bakery:   'Cukiernia',
+        nav_contact:  'Kontakt',
+        nav_cafe:     'WypiekaMY Kawiarnia',
+        nav_terms:    'Regulamin cukierni',
+        nav_about:    'O nas',
+        cat_all:      '🍩 Pączki',
+        cat_ciasta:   '🥐 Ciasta',
+        cat_torty:    '🎂 Torty',
+        cat_serniki:  '🍰 Serniki',
+        cat_pufy:     '☁️ Pufy (pt–nd)',
+        cat_czekolada:'🍫 Czekolada',
+        cat_cukierki: '🍬 Cukierki',
+        cat_zestawy:  '🎁 Zestawy',
+        modal_fresh:  'Najlepsze na świeżo.',
+        modal_total:  'Łącznie:',
+        modal_add:    'Dodaj do koszyka',
+        modal_avail:  'Dostępne:',
+        modal_pieces: 'sztuk',
+        no_products:  'Brak produktów w tej kategorii.',
+      },
+      en: {
+        cart:         'Cart',
+        search:       'Search products',
+        nav_bakery:   'Bakery',
+        nav_contact:  'Contact',
+        nav_cafe:     'WypiekaMY Café',
+        nav_terms:    'Terms & Conditions',
+        nav_about:    'About us',
+        cat_all:      '🍩 Doughnuts',
+        cat_ciasta:   '🥐 Pastries',
+        cat_torty:    '🎂 Cakes',
+        cat_serniki:  '🍰 Cheesecakes',
+        cat_pufy:     '☁️ Puffs (Fri–Sun)',
+        cat_czekolada:'🍫 Chocolate',
+        cat_cukierki: '🍬 Sweets',
+        cat_zestawy:  '🎁 Gift Sets',
+        modal_fresh:  'Best enjoyed fresh.',
+        modal_total:  'Total:',
+        modal_add:    'Add to cart',
+        modal_avail:  'Available:',
+        modal_pieces: 'pieces',
+        no_products:  'No products in this category.',
+      }
+    };
+
+    let currentLang = localStorage.getItem('wypiekamy_lang') || 'pl';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('wypiekamy_lang', lang);
+      document.documentElement.lang = lang === 'en' ? 'en' : 'pl';
+      const t = translations[lang];
+
+      /* text nodes */
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+
+      /* placeholders */
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.dataset.i18nPh;
+        if (t[key] !== undefined) el.placeholder = t[key];
+      });
+
+      /* card names */
+      document.querySelectorAll('#product-grid .card').forEach(card => {
+        const p = products.find(x => x.id === +card.dataset.id);
+        if (!p) return;
+        const nameEl = card.querySelector('.card-name');
+        if (nameEl) nameEl.textContent = lang === 'en' ? p.name_en : p.name;
+      });
+
+      /* lang button active state */
+      document.querySelectorAll('.lang-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.lang === lang);
+      });
+    }
+
+    /* ── HELPERS ── */
+    function toggleHeart(btn) {
+      event.stopPropagation();
+      btn.classList.toggle('liked');
+    }
+
+    function filterCat(btn, cat) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cards = document.querySelectorAll('#product-grid .card');
+      let visible = 0;
+      cards.forEach(card => {
+        const show = cat === 'all' || card.dataset.cat === cat;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('empty-state').style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    function openDrawer() {
+      document.getElementById('drawer').classList.add('open');
+      document.getElementById('drawer-backdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      document.getElementById('drawer').classList.remove('open');
+      document.getElementById('drawer-backdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeDrawer(); closeProduct(); }
+    });
+
+    function openProduct(id) {
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      const lang = currentLang;
+      const t = translations[lang];
+      const name      = lang === 'en' ? p.name_en      : p.name;
+      const cat       = lang === 'en' ? p.cat_en       : p.cat;
+      const desc      = lang === 'en' ? p.desc_en      : p.desc;
+      const freshness = lang === 'en' ? p.freshness_en : p.freshness;
+
+      document.getElementById('modal-breadcrumb').textContent = cat + ' › ' + name;
+      document.getElementById('modal-img').src   = p.img;
+      document.getElementById('modal-img').alt   = name;
+      document.getElementById('modal-cat').textContent       = cat;
+      document.getElementById('modal-name').textContent      = name;
+      document.getElementById('modal-available').textContent = t.modal_avail + ' ' + p.available + ' ' + t.modal_pieces;
+      document.getElementById('modal-desc').textContent      = desc;
+      document.getElementById('modal-freshness').textContent = freshness;
+      document.getElementById('modal-price').textContent     = p.price + ' zł';
+      document.getElementById('modal-heart').classList.remove('liked');
+      document.getElementById('prod-modal').classList.add('open');
+      document.getElementById('prod-backdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeProduct() {
+      document.getElementById('prod-modal').classList.remove('open');
+      document.getElementById('prod-backdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ── RESTORE LANGUAGE ON LOAD ── */
+    if (currentLang === 'en') setLanguage('en');
+  </script>
+
+</body>
+</html>
