@@ -29,6 +29,10 @@
     .para-block:last-child{border-bottom:none;}
     .lang-btn{font-family:'Nunito',sans-serif;font-size:13px;font-weight:500;color:rgba(142,21,0,0.5);background:none;border:none;cursor:pointer;padding:2px 0;}
     .lang-btn.active{color:#8e1500;border-bottom:1.5px solid #8e1500;font-weight:700;}
+    @media(max-width:640px){
+      .reg-section{padding:20px 16px 60px !important;}
+      .reg-h1{font-size:28px !important;}
+    }
   </style>
 </head>
 <body>
@@ -39,9 +43,9 @@
         <svg width="18" height="18" fill="none" stroke="#8e1500" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
       <div style="display:flex;align-items:center;gap:10px;">
-        <button class="lang-btn active" data-lang="pl" onclick="setLanguage('pl')">Polski</button>
+        <button class="lang-btn active" data-lang="pl" onclick="setLanguage('pl')">PL</button>
         <span style="color:rgba(232,138,146,0.5);font-size:13px;">|</span>
-        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
       </div>
     </div>
     <div style="position:relative;padding:4px 20px 14px;">
@@ -85,8 +89,8 @@
       <p style="font-size:12.5px;opacity:0.45;"><a href="index.html" data-i18n="bc_home" style="text-decoration:none;color:inherit;">Strona główna</a> › <span data-i18n="bc_terms">Regulamin</span></p>
     </div>
 
-    <section style="max-width:800px;margin:0 auto;padding:24px 20px 80px;">
-      <h1 data-i18n="h1_terms" style="font-size:clamp(32px,5vw,52px);font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;">Regulamin</h1>
+    <section class="reg-section" style="max-width:800px;margin:0 auto;padding:24px 20px 80px;">
+      <h1 class="reg-h1" data-i18n="h1_terms" style="font-size:clamp(32px,5vw,52px);font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;">Regulamin</h1>
       <p data-i18n="last_updated" style="font-size:12.5px;opacity:0.4;margin-bottom:48px;">Ostatnia aktualizacja: [data do uzupełnienia]</p>
 
       <div class="para-block">

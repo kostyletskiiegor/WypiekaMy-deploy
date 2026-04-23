@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PORT = 3000;
+const PORT = 3001;
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -24,7 +24,7 @@ const mimeTypes = {
 };
 
 const server = createServer(async (req, res) => {
-  let urlPath = req.url.split('?')[0].split('#')[0];
+  let urlPath = decodeURIComponent(req.url.split('?')[0].split('#')[0]);
   if (urlPath === '/') urlPath = '/index.html';
 
   const filePath = join(__dirname, urlPath);
