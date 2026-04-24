@@ -7,7 +7,7 @@ export default defineType({
 
   fields: [
     defineField({ name: 'name_pl', title: 'Nazwa (PL)', type: 'string', validation: R => R.required() }),
-    defineField({ name: 'name_en', title: 'Nazwa (EN)', type: 'string', validation: R => R.required() }),
+    defineField({ name: 'name_en', title: 'Nazwa (EN) — uzupełnij przyciskiem Tłumacz', type: 'string' }),
     defineField({
       name: 'price',
       title: 'Cena (zł)',
@@ -40,22 +40,14 @@ export default defineType({
       options: { hotspot: true },
       validation: R => R.required(),
     }),
-    defineField({ name: 'desc_pl',      title: 'Opis (PL)',         type: 'text',   rows: 4, validation: R => R.required() }),
-    defineField({ name: 'desc_en',      title: 'Opis (EN)',         type: 'text',   rows: 4, validation: R => R.required() }),
-    defineField({ name: 'freshness_pl', title: 'Świeżość (PL)',     type: 'string', validation: R => R.required() }),
-    defineField({ name: 'freshness_en', title: 'Świeżość (EN)',     type: 'string', validation: R => R.required() }),
+    defineField({ name: 'desc_pl', title: 'Opis (PL)', type: 'text', rows: 4, validation: R => R.required() }),
+    defineField({ name: 'desc_en', title: 'Opis (EN) — uzupełnij przyciskiem Tłumacz', type: 'text', rows: 4 }),
     defineField({
       name: 'available',
       title: 'Sztuk dostępnych',
       type: 'number',
       initialValue: 0,
       validation: R => R.required().min(0).integer(),
-    }),
-    defineField({
-      name: 'sortOrder',
-      title: 'Kolejność wyświetlania',
-      type: 'number',
-      initialValue: 99,
     }),
   ],
 
