@@ -17,20 +17,8 @@ export default defineType({
     defineField({
       name: 'category',
       title: 'Kategoria',
-      type: 'string',
-      options: {
-        layout: 'dropdown',
-        list: [
-          { title: '🍩 Pączki',    value: 'paczki'    },
-          { title: '🥐 Ciasta',    value: 'ciasta'    },
-          { title: '🎂 Torty',     value: 'torty'     },
-          { title: '🍰 Serniki',   value: 'serniki'   },
-          { title: '☁️ Pufy',      value: 'pufy'      },
-          { title: '🍫 Czekolada', value: 'czekolada' },
-          { title: '🍬 Cukierki',  value: 'cukierki'  },
-          { title: '🎁 Zestawy',   value: 'zestawy'   },
-        ],
-      },
+      type: 'reference',
+      to: [{ type: 'category' }],
       validation: R => R.required(),
     }),
     defineField({
