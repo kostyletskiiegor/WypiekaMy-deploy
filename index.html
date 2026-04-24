@@ -257,7 +257,7 @@
        HEADER
   ========================================================= -->
   <header style="position: sticky; top: 0; z-index: 50; background: #ffebef; border-bottom: 1px solid rgba(232,138,146,0.22);">
-    <div style="max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 90px; display: flex; align-items: center; gap: 16px;">
+    <div style="width: 100%; padding: 0 28px; height: 80px; display: flex; align-items: center; gap: 16px; box-sizing: border-box;">
 
       <!-- LEFT: hamburger + search -->
       <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;">
@@ -277,20 +277,19 @@
       <!-- CENTER: Logo -->
       <a href="#" style="display: flex; align-items: center; flex-shrink: 0; text-decoration: none; padding: 0 12px;">
         <img src="brand_assets/WypiekaMY_logo_transparent.png" alt="WypiekaMY"
-          style="height:58px;width:240px;object-fit:cover;mix-blend-mode:multiply;">
+          style="height:52px;width:230px;object-fit:cover;mix-blend-mode:multiply;">
       </a>
 
       <!-- RIGHT: Cart button -->
       <div style="flex: 1; display: flex; justify-content: flex-end;">
         <button id="cart-btn" aria-label="Koszyk"
-          style="display:flex;align-items:center;gap:8px;background:#8e1500;color:#ffebef;border:none;border-radius:100px;padding:10px 20px;cursor:pointer;font-family:'Plein',sans-serif;font-size:14px;font-weight:600;transition:background 0.15s,transform 0.1s;flex-shrink:0;"
-          onmouseover="this.style.background='#a31800'"
-          onmouseout="this.style.background='#8e1500'"
-          onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
-          <svg width="17" height="17" fill="none" stroke="#ffebef" viewBox="0 0 24 24">
+          style="width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:none;border:1.5px solid rgba(142,21,0,0.22);border-radius:10px;cursor:pointer;transition:background 0.15s,border-color 0.15s,transform 0.1s;flex-shrink:0;"
+          onmouseover="this.style.background='rgba(232,138,146,0.18)';this.style.borderColor='rgba(142,21,0,0.45)'"
+          onmouseout="this.style.background='none';this.style.borderColor='rgba(142,21,0,0.22)'"
+          onmousedown="this.style.transform='scale(0.92)'" onmouseup="this.style.transform='scale(1)'">
+          <svg width="19" height="19" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
           </svg>
-          <span data-i18n="cart">Koszyk</span>
         </button>
       </div>
 
@@ -312,8 +311,8 @@
   <!-- =========================================================
        CATEGORY TABS
   ========================================================= -->
-  <div style="background: #ffebef; position: sticky; top: 90px; z-index: 40; border-bottom: 1px solid rgba(232,138,146,0.2);">
-    <div style="max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: stretch;" class="cat-strip">
+  <div style="background: #ffebef; position: sticky; top: 80px; z-index: 40; border-bottom: 1px solid rgba(232,138,146,0.2);">
+    <div style="width: 100%; padding: 0 16px; display: flex; align-items: stretch; justify-content: center;" class="cat-strip">
       <span id="cat-buttons" style="display: contents;"></span>
     </div>
   </div>
