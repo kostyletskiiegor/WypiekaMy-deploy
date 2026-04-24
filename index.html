@@ -73,9 +73,9 @@
     ::-webkit-scrollbar-thumb { background: #e88a92; border-radius: 3px; }
 
     /* category tabs */
-    .cat-btn { font-family: 'Plein', sans-serif; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; padding: 10px 14px; white-space: nowrap; font-size: 13.5px; font-weight: 500; color: #8e1500; display: flex; align-items: center; gap: 6px; transition: opacity 0.15s; }
+    .cat-btn { font-family: 'Plein', sans-serif; background: none; border: none; border-bottom: 2.5px solid transparent; cursor: pointer; padding: 18px 20px; white-space: nowrap; font-size: 14px; font-weight: 500; color: #8e1500; display: flex; align-items: center; gap: 7px; transition: opacity 0.15s; }
     .cat-btn:hover { opacity: 0.65; }
-    .cat-btn.active { border-bottom: 2px dashed #8e1500; font-weight: 700; }
+    .cat-btn.active { border-bottom: 2.5px solid #8e1500; font-weight: 700; }
 
     /* hide scrollbar for categories strip */
     .cat-strip { overflow-x: auto; scrollbar-width: none; }
@@ -84,7 +84,7 @@
     /* product card */
     .card { cursor: pointer; }
     .card-img-wrap { position: relative; overflow: hidden; border-radius: 14px; }
-    .card-img-wrap img { width: 100%; aspect-ratio: 5 / 6; object-fit: cover; display: block; transition: transform 0.35s ease; border-radius: 14px; }
+    .card-img-wrap img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform 0.35s ease; border-radius: 14px; }
     .card:hover .card-img-wrap img { transform: scale(1.04); }
 
     /* heart button */
@@ -257,17 +257,17 @@
        HEADER
   ========================================================= -->
   <header style="position: sticky; top: 0; z-index: 50; background: #ffebef; border-bottom: 1px solid rgba(232,138,146,0.22);">
-    <div style="max-width: 1400px; margin: 0 auto; padding: 0 16px; height: 64px; display: flex; align-items: center; gap: 12px;">
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 90px; display: flex; align-items: center; gap: 16px;">
 
       <!-- LEFT: hamburger + search -->
-      <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;">
+      <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;">
         <button class="icon-btn" aria-label="Menu" onclick="openDrawer()">
-          <svg width="20" height="20" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
+          <svg width="22" height="22" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
         </button>
         <div style="position: relative; align-items: center;" class="hidden sm:flex">
-          <svg style="position: absolute; left: 11px; width: 14px; height: 14px; pointer-events: none; opacity: 0.45;" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
+          <svg style="position: absolute; left: 11px; width: 15px; height: 15px; pointer-events: none; opacity: 0.45;" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
           <input type="text" data-i18n-ph="search" placeholder="Szukaj produktów" class="search-input">
@@ -275,21 +275,22 @@
       </div>
 
       <!-- CENTER: Logo -->
-      <a href="#" style="display: flex; align-items: center; flex-shrink: 0; text-decoration: none; padding: 0 8px;">
+      <a href="#" style="display: flex; align-items: center; flex-shrink: 0; text-decoration: none; padding: 0 12px;">
         <img src="brand_assets/WypiekaMY_logo_transparent.png" alt="WypiekaMY"
-          style="height:40px;width:180px;object-fit:cover;mix-blend-mode:multiply;">
+          style="height:58px;width:240px;object-fit:cover;mix-blend-mode:multiply;">
       </a>
 
       <!-- RIGHT: Cart button -->
       <div style="flex: 1; display: flex; justify-content: flex-end;">
         <button id="cart-btn" aria-label="Koszyk"
-          style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:none;border:1.5px solid rgba(142,21,0,0.22);border-radius:10px;cursor:pointer;transition:background 0.15s,border-color 0.15s,transform 0.1s;flex-shrink:0;"
-          onmouseover="this.style.background='rgba(232,138,146,0.18)';this.style.borderColor='rgba(142,21,0,0.45)'"
-          onmouseout="this.style.background='none';this.style.borderColor='rgba(142,21,0,0.22)'"
-          onmousedown="this.style.transform='scale(0.92)'" onmouseup="this.style.transform='scale(1)'">
-          <svg width="18" height="18" fill="none" stroke="#8e1500" viewBox="0 0 24 24">
+          style="display:flex;align-items:center;gap:8px;background:#8e1500;color:#ffebef;border:none;border-radius:100px;padding:10px 20px;cursor:pointer;font-family:'Plein',sans-serif;font-size:14px;font-weight:600;transition:background 0.15s,transform 0.1s;flex-shrink:0;"
+          onmouseover="this.style.background='#a31800'"
+          onmouseout="this.style.background='#8e1500'"
+          onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
+          <svg width="17" height="17" fill="none" stroke="#ffebef" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
           </svg>
+          <span data-i18n="cart">Koszyk</span>
         </button>
       </div>
 
@@ -311,8 +312,8 @@
   <!-- =========================================================
        CATEGORY TABS
   ========================================================= -->
-  <div style="background: #ffebef; position: sticky; top: 64px; z-index: 40; border-bottom: 1px solid rgba(232,138,146,0.2);">
-    <div style="max-width: 1400px; margin: 0 auto; padding: 0 8px; display: flex; align-items: stretch;" class="cat-strip">
+  <div style="background: #ffebef; position: sticky; top: 90px; z-index: 40; border-bottom: 1px solid rgba(232,138,146,0.2);">
+    <div style="max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: stretch;" class="cat-strip">
       <span id="cat-buttons" style="display: contents;"></span>
     </div>
   </div>
@@ -320,9 +321,9 @@
   <!-- =========================================================
        PRODUCT GRID
   ========================================================= -->
-  <main style="max-width: 1180px; margin: 0 auto; padding: 32px 28px;">
-    <div id="loading-skeleton" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4" style="gap: 26px; display:none;"></div>
-    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4" style="gap: 26px;"></div>
+  <main style="max-width: 1400px; margin: 0 auto; padding: 36px 40px;">
+    <div id="loading-skeleton" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4" style="gap: 32px; display:none;"></div>
+    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4" style="gap: 32px;"></div>
 
     <!-- Empty state -->
     <div id="empty-state" style="display:none; text-align:center; padding:64px 16px;">
@@ -434,9 +435,9 @@
                 <svg viewBox="0 0 24 24" stroke="#8e1500" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
               </button>
             </div>
-            <div style="padding:10px 4px 14px;">
-              <p class="card-name" style="font-size:13px;font-weight:600;line-height:1.35;">${name}</p>
-              <p style="font-size:13px;font-weight:700;margin-top:3px;">${p.price} zł</p>
+            <div style="padding:12px 2px 16px;">
+              <p class="card-name" style="font-size:14.5px;font-weight:600;line-height:1.4;">${name}</p>
+              <p style="font-size:14px;font-weight:700;margin-top:4px;">${p.price} zł</p>
             </div>
           </div>`;
       }).join('');
@@ -462,6 +463,7 @@
         cat_czekolada:'🍫 Czekolada',
         cat_cukierki: '🍬 Cukierki',
         cat_zestawy:  '🎁 Zestawy',
+        cart:         'Koszyk',
         modal_fresh:  'Najlepsze na świeżo.',
         modal_total:  'Łącznie:',
         modal_add:    'Dodaj do koszyka',
@@ -485,6 +487,7 @@
         cat_czekolada:'🍫 Chocolate',
         cat_cukierki: '🍬 Sweets',
         cat_zestawy:  '🎁 Gift Sets',
+        cart:         'Cart',
         modal_fresh:  'Best enjoyed fresh.',
         modal_total:  'Total:',
         modal_add:    'Add to cart',
