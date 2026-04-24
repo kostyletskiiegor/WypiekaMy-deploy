@@ -20,6 +20,6 @@ export default defineConfig({
 
   document: {
     actions: (prev, ctx) =>
-      ctx.schemaType === 'product' ? [...prev, TranslateAction] : prev,
+      ['product', 'category'].includes(ctx.schemaType) ? [...prev, TranslateAction] : prev,
   },
 })

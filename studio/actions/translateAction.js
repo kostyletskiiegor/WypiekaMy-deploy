@@ -14,7 +14,7 @@ export function TranslateAction(props) {
   const [isTranslating, setIsTranslating] = useState(false)
   const doc = props.draft || props.published
 
-  if (props.type !== 'product') return null
+  if (props.type !== 'product' && props.type !== 'category') return null
 
   return {
     label: isTranslating ? 'Tłumaczę...' : '🌐 Tłumacz na EN',
@@ -23,12 +23,8 @@ export function TranslateAction(props) {
       setIsTranslating(true)
       try {
         const patches = {}
-        if (doc?.name_pl) {
-          patches.name_en = await translateText(doc.name_pl)
-        }
-        if (doc?.desc_pl) {
-          patches.desc_en = await translateText(doc.desc_pl)
-        }
+        if (doc?.name_pl) patches.name_en = await translateText(doc.name_pl)
+        if (doc?.desc_pl) patches.desc_en = await translateText(doc.desc_pl)
         patch.execute([{ set: patches }])
       } finally {
         setIsTranslating(false)
