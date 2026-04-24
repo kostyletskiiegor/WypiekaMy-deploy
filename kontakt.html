@@ -7,31 +7,32 @@
   <title>Kontakt — WypiekaMY</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plein:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=plein@401&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     *, *::before, *::after { box-sizing:border-box;margin:0;padding:0;color:#8e1500; }
     html { scrollbar-color:#e88a92 #ffebef; }
-    body { font-family:'Nunito',sans-serif;background-color:#ffebef; }
+    body { font-family:'Plein',sans-serif;background-color:#ffebef; }
     ::-webkit-scrollbar{width:5px;} ::-webkit-scrollbar-track{background:#ffebef;} ::-webkit-scrollbar-thumb{background:#e88a92;border-radius:3px;}
     #drawer-backdrop{position:fixed;inset:0;background:rgba(142,21,0,0.12);z-index:90;opacity:0;pointer-events:none;transition:opacity 0.28s ease;}
     #drawer-backdrop.open{opacity:1;pointer-events:all;}
     #drawer{position:fixed;top:0;left:0;height:100%;width:290px;background:#ffebef;z-index:100;transform:translateX(-100%);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:4px 0 32px rgba(142,21,0,0.1);}
     #drawer.open{transform:translateX(0);}
-    .drawer-link{font-family:'Nunito',sans-serif;font-size:14.5px;font-weight:500;color:#8e1500;background:none;border:none;cursor:pointer;text-align:left;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;transition:background 0.15s;}
+    .drawer-link{font-family:'Plein',sans-serif;font-size:14.5px;font-weight:500;color:#8e1500;background:none;border:none;cursor:pointer;text-align:left;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;gap:8px;text-decoration:none;transition:background 0.15s;}
     .drawer-link:hover{background:rgba(232,138,146,0.15);}
     .drawer-divider{height:1px;background:rgba(232,138,146,0.3);margin:6px 24px;}
-    .drawer-search{font-family:'Nunito',sans-serif;background:transparent;color:#8e1500;border:1px solid rgba(232,138,146,0.45);border-radius:100px;padding:8px 14px 8px 36px;font-size:13px;width:100%;outline:none;transition:border-color 0.2s;}
+    .drawer-search{font-family:'Plein',sans-serif;background:transparent;color:#8e1500;border:1px solid rgba(232,138,146,0.45);border-radius:100px;padding:8px 14px 8px 36px;font-size:13px;width:100%;outline:none;transition:border-color 0.2s;}
     .drawer-search::placeholder{color:rgba(142,21,0,0.38);}
     .icon-btn{padding:8px;border-radius:10px;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.15s;}
     .icon-btn:hover{background:rgba(232,138,146,0.18);}
     .info-item{display:flex;gap:14px;align-items:flex-start;}
     .info-icon{width:40px;height:40px;border-radius:12px;background:rgba(232,138,146,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-    .form-input{font-family:'Nunito',sans-serif;width:100%;background:rgba(255,255,255,0.7);color:#8e1500;border:1px solid rgba(232,138,146,0.35);border-radius:12px;padding:11px 14px;font-size:13.5px;outline:none;transition:border-color 0.2s;}
+    .form-input{font-family:'Plein',sans-serif;width:100%;background:rgba(255,255,255,0.7);color:#8e1500;border:1px solid rgba(232,138,146,0.35);border-radius:12px;padding:11px 14px;font-size:13.5px;outline:none;transition:border-color 0.2s;}
     .form-input::placeholder{color:rgba(142,21,0,0.35);}
     .form-input:focus{border-color:rgba(142,21,0,0.5);}
     .form-label{font-size:12.5px;font-weight:600;opacity:0.55;margin-bottom:6px;display:block;}
-    .lang-btn{font-family:'Nunito',sans-serif;font-size:13px;font-weight:500;color:rgba(142,21,0,0.5);background:none;border:none;cursor:pointer;padding:2px 0;}
+    .lang-btn{font-family:'Plein',sans-serif;font-size:13px;font-weight:500;color:rgba(142,21,0,0.5);background:none;border:none;cursor:pointer;padding:2px 0;}
     .lang-btn.active{color:#8e1500;border-bottom:1.5px solid #8e1500;font-weight:700;}
   </style>
 </head>
@@ -168,7 +169,7 @@
             <label class="form-label" data-i18n="form_msg_label">Wiadomość</label>
             <textarea name="message" rows="5" data-i18n-ph="form_msg_ph" placeholder="Napisz do nas..." class="form-input" style="resize:none;"></textarea>
           </div>
-          <button type="submit" data-i18n="form_submit" style="align-self:flex-start;background:#8e1500;color:#ffebef;border:none;border-radius:100px;padding:12px 28px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.18s;" onmouseover="this.style.background='#a31800'" onmouseout="this.style.background='#8e1500'">Wyślij wiadomość</button>
+          <button type="submit" data-i18n="form_submit" style="align-self:flex-start;background:#8e1500;color:#ffebef;border:none;border-radius:100px;padding:12px 28px;font-family:'Plein',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.18s;" onmouseover="this.style.background='#a31800'" onmouseout="this.style.background='#8e1500'">Wyślij wiadomość</button>
         </form>
       </div>
     </section>
