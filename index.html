@@ -84,7 +84,7 @@
     /* product card */
     .card { cursor: pointer; }
     .card-img-wrap { position: relative; overflow: hidden; border-radius: 14px; }
-    .card-img-wrap img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; transition: transform 0.35s ease; border-radius: 14px; }
+    .card-img-wrap img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform 0.35s ease; border-radius: 14px; }
     .card:hover .card-img-wrap img { transform: scale(1.04); }
 
     /* heart button */
@@ -321,8 +321,8 @@
        PRODUCT GRID
   ========================================================= -->
   <main style="max-width: 1400px; margin: 0 auto; padding: 36px 40px;">
-    <div id="loading-skeleton" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4" style="gap: 32px; display:none;"></div>
-    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4" style="gap: 32px;"></div>
+    <div id="loading-skeleton" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" style="gap: 22px; display:none;"></div>
+    <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5" style="gap: 22px;"></div>
 
     <!-- Empty state -->
     <div id="empty-state" style="display:none; text-align:center; padding:64px 16px;">
