@@ -2,3 +2,4 @@ studio/node_modules/
 studio/.sanity/
 studio/dist/
 .claude/settings.local.json
+.env
